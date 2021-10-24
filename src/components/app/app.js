@@ -5,12 +5,12 @@ import RandomChar from '../randomChar';
 import CharacterPage from '../characterPage/characterPage';
 import Button from 'reactstrap/lib/Button';
 import ErrorMessage from '../errorMessage/errormessage';
+import './app.css'
 
 export default class App extends Component{
     state = {
         showRandomChar: true,
-        error: false,
-        selectedChar: 130
+        error: false
     }
 
     componentDidCatch(){

@@ -7,7 +7,7 @@ import ErrorMessage from "../errorMessage/errormessage";
 export default class CharacterPage extends Component{
     state = {
         error: false,
-        selectedChar: 130
+        selectedChar: null
     }
     componentDidCatch(){
         this.setState({
@@ -21,7 +21,7 @@ export default class CharacterPage extends Component{
                 selectedChar: id
             }
         })
-        console.log(this.state)
+        
     }
 
     render(){
