@@ -5,9 +5,12 @@ import RandomChar from '../randomChar';
 import CharacterPage from '../characterPage/characterPage';
 import Button from 'reactstrap/lib/Button';
 import ErrorMessage from '../errorMessage/errormessage';
-import './app.css'
-
+import GotService from '../../services/gotservice';
+import ItemList from '../itemList';
+import CharDetails from '../charDetails';
 export default class App extends Component{
+    gotService = new GotService()
+
     state = {
         showRandomChar: true,
         error: false
@@ -31,6 +34,8 @@ export default class App extends Component{
     
     render(){
 
+        const characters = () => this.gotService.getAllCharacters()
+        const books = () => this.gotService.getAllBooks()
         const char = this.state.showRandomChar ? <RandomChar/> : null 
 
         if (this.state.error){
@@ -54,7 +59,24 @@ export default class App extends Component{
                         </Col>
                         
                     </Row>
-                    <CharacterPage/>
+                    <CharacterPage
+                    items = {() => characters()}
+                    />
+                    <Row>
+                        <Col md='6'>
+                            <ItemList 
+                            renderItem = {({name}) => name}
+                            items = {() => books()}
+                            // selectedItem = {(id) => this.onItemSelected(id)}
+                            />
+                        </Col>
+                        
+                        <Col md='6'>
+                            <CharDetails
+                            id = {this.state.selectedItem}
+                                />
+                        </Col>
+                    </Row>
                 </Container>
             </>
         );

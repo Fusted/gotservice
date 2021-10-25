@@ -11,7 +11,7 @@ export default class GotService{
         return await res.json()
     }
 
-    async getAllCharacters(){
+    getAllCharacters = async () =>{
         const ans = await this.getResource('/characters?page=5')
         return ans.map(this.__transformChar)
     }
@@ -31,8 +31,8 @@ export default class GotService{
     }
 
 
-    getAllBooks() {
-        return this.getResource(`/books/`)
+    getAllBooks = async () =>  {
+        return await this.getResource(`/books/`)
     }
     
     getBook(id) {

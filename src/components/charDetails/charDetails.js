@@ -3,56 +3,68 @@ import './charDetails.css';
 import GotService from '../../services/gotservice';
 import Spinner from 'reactstrap/lib/Spinner';
 
+const Field = ({item, label, field }) => {
+    console.log(item)
+    return (
+        <li className="list-group-item d-flex justify-content-between">
+            <span className="term">{label}</span>
+            <span>{item[field]}</span>
+        </li>
+    )
+}
 
+export {
+    Field
+}
 export default class CharDetails extends Component {
     gotService = new GotService()
 
     state = {
         loading: true,
-        char: null
+        item: null
     }
 
     componentDidMount(){
-        this.updateChar()
+        this.updateItem()
     }
 
     componentDidUpdate(prevProps){
         if (this.props.id !== prevProps.id){
-            this.updateChar()
+            this.updateItem()
         }
     }
 
-    onCharLoaded = (char) => {
+    onItemLoaded = (item) => {
         this.setState({
-            char,
+            item,
             loading: false
         })
     }
 
     onError(){
         this.setState({
-            char: null,
+            item: null,
             error: true
         })
     }
 
-    updateChar(){
+    updateItem(){
         if (!this.props.id){
             return
         }
-        console.log('loading')
+        
         this.setState({
             loading: true
         })
         
         this.gotService.getCharacter(this.props.id)
-            .then((char) => {this.onCharLoaded(char)})
+            .then((item) => {this.onItemLoaded(item)})
             .catch(() => this.onError())
         
     }
 
     render() {
-        if (!this.state.char){
+        if (!this.state.item){
             
             return (
                 <span className='select-error'>Choose a character</span>
@@ -68,28 +80,19 @@ export default class CharDetails extends Component {
             )
         }
 
-        const {name, gender, born, died, culture} = this.state.char
+        const {item} = this.state
+        const {name} = item
     
         return (
             <div className="char-details rounded">
                 <h4>J{name}</h4>
                 <ul className="list-group list-group-flush">
-                    <li className="list-group-item d-flex justify-content-between">
-                        <span className="term">Gender</span>
-                        <span>{gender}</span>
-                    </li>
-                    <li className="list-group-item d-flex justify-content-between">
-                        <span className="term">Born</span>
-                        <span>{born}</span>
-                    </li>
-                    <li className="list-group-item d-flex justify-content-between">
-                        <span className="term">Died</span>
-                        <span>{died}</span>
-                    </li>
-                    <li className="list-group-item d-flex justify-content-between">
-                        <span className="term">Culture</span>
-                        <span>{culture}</span>
-                    </li>
+                    {   
+                        React.Children.map(this.props.children, (child) => {
+                            return React.cloneElement(child, {item})
+                        })
+                    }
+                    
                 </ul>
             </div>
         );

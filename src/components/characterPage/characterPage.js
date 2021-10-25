@@ -1,13 +1,15 @@
 import React, {Component} from "react"
-import {Col, Row} from 'reactstrap';
+//import {Col, Row} from 'reactstrap';
 import ItemList from '../itemList';
-import CharDetails from '../charDetails';
+import CharDetails, { Field } from '../charDetails';
 import ErrorMessage from "../errorMessage/errormessage";
+import './characterPage.css';
+import RowBlock from "../rowBlock";
 
 export default class CharacterPage extends Component{
     state = {
         error: false,
-        selectedChar: null
+        selectedItem: null
     }
     componentDidCatch(){
         this.setState({
@@ -15,34 +17,37 @@ export default class CharacterPage extends Component{
         })
     }
 
-    onCharSelected = (id) => {
+    onItemSelected = (id) => {
         this.setState(() => {
             return {
-                selectedChar: id
+                selectedItem: id
             }
         })
         
-    }
+    } 
 
     render(){
         if (this.state.error){
             return <ErrorMessage/> 
         }
-        return (
-            <Row>
-                <Col md='6'>
-                    <ItemList 
-                    selectedChar = {(id) => this.onCharSelected(id)}
+        const itemList = (
+            <ItemList 
+                    renderItem = {({name, gender}) => `${name} (${gender})`}
+                    items = {() => this.props.items()}
+                    selectedItem = {(id) => this.onItemSelected(id)}
                     />
-                </Col>
+        )
 
-                <Col md='6'>
-                    <CharDetails
-                    id = {this.state.selectedChar}
-                        />
-                </Col>
-            </Row>
-            
+        const charDetails = (
+
+            <CharDetails id = {this.state.selectedItem}>
+                <Field field = 'gender' label = 'Gender'/>
+                <Field field = 'born' label = 'Born'/> 
+            </CharDetails>
+        )
+
+        return (
+            <RowBlock left = {itemList} right = {charDetails}/>
         )
     }
 }

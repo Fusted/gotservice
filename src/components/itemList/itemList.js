@@ -9,30 +9,32 @@ export default class ItemList extends Component {
     gotService = new GotService()
 
     state = {
-        charachters: null
+        items: null
     }
 
     componentDidMount(){
-        this.gotService.getAllCharacters()
-            .then((charList) => {
-                this.setState({charList})
+        
+        this.props.items ()
+            .then((itemList) => {
+                this.setState({itemList})
             })
     }
 
 
 
     renderItems(items){
-        const {selectedChar} = this.props
-
+        const {selectedItem} = this.props
+        
         return(
-            items.map((item, i) => {
+            items.map((item, i) => { 
                 const id = i
+                const label = this.props.renderItem(item)
                 return (
                     <li 
-                    key={id}
-                    onClick = {() => selectedChar(120 + id)}
+                    key={Object.values(item).join('') + i}
+                    onClick = {() => selectedItem(120 + id)} 
                     className="list-group-item">
-                        {item.name}
+                        {label}
                     </li>
                 )
             })
@@ -42,13 +44,13 @@ export default class ItemList extends Component {
 
     render() {
 
-        const {charList} = this.state
+        const {itemList} = this.state
         
-        if(!charList){
+        if(!itemList){
             return <Spinner />
         }
-
-        const items = this.renderItems(charList)
+        
+        const items = this.renderItems(itemList)
         
         return (
             <ul className="item-list list-group">
