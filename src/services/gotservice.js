@@ -1,9 +1,9 @@
 export default class GotService{
-    constructor(){
-        this._apiBase = 'https://www.anapioficeandfire.com/api'
-    }
+    
+    static _apiBase = 'https://www.anapioficeandfire.com/api'
+    
 
-    async getResource(url){
+    static async getResource(url){
         const res = await fetch(`${this._apiBase}${url}`)
         if (!res.ok){
             throw new Error (`Could not fetch ${url}`)
@@ -11,45 +11,56 @@ export default class GotService{
         return await res.json()
     }
 
-    getAllCharacters = async () =>{
+    static getAllCharacters = async () =>{
         const ans = await this.getResource('/characters?page=5')
         return ans.map(this.__transformChar)
     }
-
-    async getCharacter(id){
+    static async getCharacter(id) {
         const ans = await this.getResource(`/characters/${id}`)
         const character = this.__transformChar(ans)
         
-        for (let par in character){
-            if (!character[par]){
-                
-                character[par] = 'There is no info about it'
-            }
-        }
+        this.checkForInfo(character)
+        
         
         return character
     }
+    
 
-
-    getAllBooks = async () =>  {
+    static getAllBooks = async () =>  {
+        
         return await this.getResource(`/books/`)
     }
     
-    getBook(id) {
-        return this.getResource(`/books/${id}/`)
+    static async getBook(id) {
+        const book = await this.getResource(`/books/${id}/`)
+
+        this.checkForInfo(book)
+
+        return book
     }
     
     
-    getAllHouses() {
+    static getAllHouses() {
         return this.getResource(`/houses/`)
     }
     
-    getHouse(id) {
-        return this.getResource(`/houses/${id}/`)
+    static async getHouse(id) {
+        const house = await this.getResource(`/houses/${id}/`)
+        
+        this.checkForInfo(house)
+
+        return house
     }
 
+    static checkForInfo(item){
+        for (let par in item){
+            if (!item[par]){ 
+                item[par] = 'There is no info about it'
+            }
+        }
+    }
 
-    __transformChar(char) {
+    static __transformChar(char) {
         return {
             name: char.name,
             gender: char.gender,

@@ -1,12 +1,12 @@
 import React, {Component} from 'react';
 import './itemList.css';
-import GotService from '../../services/gotservice';
+// import GotService from '../../services/gotservice';
 import Spinner from '../spinner/spinner';
 
 
 export default class ItemList extends Component {
 
-    gotService = new GotService()
+    // gotService = new GotService()
 
     state = {
         items: null
@@ -32,7 +32,7 @@ export default class ItemList extends Component {
                 return (
                     <li 
                     key={Object.values(item).join('') + i}
-                    onClick = {() => selectedItem(120 + id)} 
+                    onClick = {() => selectedItem(id)} 
                     className="list-group-item">
                         {label}
                     </li>

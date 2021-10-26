@@ -2,14 +2,14 @@ import React, {Component} from 'react';
 import {Col, Row, Container} from 'reactstrap';
 import Header from '../header';
 import RandomChar from '../randomChar';
-import CharacterPage from '../characterPage/characterPage';
 import Button from 'reactstrap/lib/Button';
 import ErrorMessage from '../errorMessage/errormessage';
 import GotService from '../../services/gotservice';
-import ItemList from '../itemList';
-import CharDetails from '../charDetails';
+import { CharacterPage, BookPage, HousePage } from '../pages';
+
+
 export default class App extends Component{
-    gotService = new GotService()
+    // gotService = new GotService()
 
     state = {
         showRandomChar: true,
@@ -34,8 +34,10 @@ export default class App extends Component{
     
     render(){
 
-        const characters = () => this.gotService.getAllCharacters()
-        const books = () => this.gotService.getAllBooks()
+        const characters = () => GotService.getAllCharacters()
+        const books = () => GotService.getAllBooks()
+        const houses = () => GotService.getAllHouses()
+        
         const char = this.state.showRandomChar ? <RandomChar/> : null 
 
         if (this.state.error){
@@ -62,25 +64,18 @@ export default class App extends Component{
                     <CharacterPage
                     items = {() => characters()}
                     />
-                    <Row>
-                        <Col md='6'>
-                            <ItemList 
-                            renderItem = {({name}) => name}
-                            items = {() => books()}
-                            // selectedItem = {(id) => this.onItemSelected(id)}
-                            />
-                        </Col>
-                        
-                        <Col md='6'>
-                            <CharDetails
-                            id = {this.state.selectedItem}
-                                />
-                        </Col>
-                    </Row>
+                    <BookPage
+                    items = {() => books()}
+                    />
+
+                    <HousePage
+                    items = {() => houses()}
+                    />
+
                 </Container>
             </>
         );
     }
-    
 };
 
+ 

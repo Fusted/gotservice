@@ -1,10 +1,10 @@
 import React, {Component} from 'react';
-import './charDetails.css';
-import GotService from '../../services/gotservice';
+import './itemDetails.css';
+// import GotService from '../../services/gotservice';
 import Spinner from 'reactstrap/lib/Spinner';
 
 const Field = ({item, label, field }) => {
-    console.log(item)
+    
     return (
         <li className="list-group-item d-flex justify-content-between">
             <span className="term">{label}</span>
@@ -16,8 +16,8 @@ const Field = ({item, label, field }) => {
 export {
     Field
 }
-export default class CharDetails extends Component {
-    gotService = new GotService()
+export default class ItemDetails extends Component {
+    // gotService = new GotService()
 
     state = {
         loading: true,
@@ -57,7 +57,7 @@ export default class CharDetails extends Component {
             loading: true
         })
         
-        this.gotService.getCharacter(this.props.id)
+        this.props.getResources()
             .then((item) => {this.onItemLoaded(item)})
             .catch(() => this.onError())
         
@@ -67,7 +67,7 @@ export default class CharDetails extends Component {
         if (!this.state.item){
             
             return (
-                <span className='select-error'>Choose a character</span>
+                <span className='select-error'>{this.props.placeholder}</span>
             )
 
         }
@@ -82,10 +82,10 @@ export default class CharDetails extends Component {
 
         const {item} = this.state
         const {name} = item
-    
+        
         return (
             <div className="char-details rounded">
-                <h4>J{name}</h4>
+                <h4>{name}</h4>
                 <ul className="list-group list-group-flush">
                     {   
                         React.Children.map(this.props.children, (child) => {

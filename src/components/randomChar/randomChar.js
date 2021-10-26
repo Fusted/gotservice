@@ -13,7 +13,7 @@ export default class RandomChar extends Component {
         loading: true,
         error: false,
     }
-    gotService = new GotService()
+    // gotService = new GotService()
 
     componentDidMount(){
         this.updateChar()
@@ -38,7 +38,7 @@ export default class RandomChar extends Component {
     updateChar = () => {
         const id = Math.floor(Math.random()* 140 + 25)
         
-        this.gotService.getCharacter(id)
+        GotService.getCharacter(id)
             .then(this.onCharLoaded)
             .catch(this.onError)
     }

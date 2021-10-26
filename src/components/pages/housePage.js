@@ -1,12 +1,16 @@
 import React, {Component} from "react"
 //import {Col, Row} from 'reactstrap';
 import ItemList from '../itemList';
-import CharDetails, { Field } from '../charDetails';
+import ItemDetails, { Field } from '../itemDetails';
 import ErrorMessage from "../errorMessage/errormessage";
-import './characterPage.css';
+import './pages.css';
 import RowBlock from "../rowBlock";
+import GotService from "../../services/gotservice";
 
-export default class CharacterPage extends Component{
+
+export default class HousePage extends Component{
+    // gotService = new GotService()
+
     state = {
         error: false,
         selectedItem: null
@@ -20,32 +24,41 @@ export default class CharacterPage extends Component{
     onItemSelected = (id) => {
         this.setState(() => {
             return {
-                selectedItem: id
+                selectedItem: id + 1
             }
         })
-        
     } 
 
+    onField = (fields) => {
+        fields.map(field => {
+            return <Field field = {field[0]} label = {field[1]}/>
+        })
+    }
+
+    
     render(){
         if (this.state.error){
             return <ErrorMessage/> 
         }
         const itemList = (
             <ItemList 
-                    renderItem = {({name, gender}) => `${name} (${gender})`}
+                    renderItem = {({name, gender}) => `${name}`}
                     items = {() => this.props.items()}
                     selectedItem = {(id) => this.onItemSelected(id)}
                     />
         )
 
         const charDetails = (
-
-            <CharDetails id = {this.state.selectedItem}>
-                <Field field = 'gender' label = 'Gender'/>
-                <Field field = 'born' label = 'Born'/> 
-            </CharDetails>
+            <ItemDetails placeholder='Choose a house' id = {this.state.selectedItem} getResources = {() => GotService.getHouse(this.state.selectedItem)}>
+                
+                <Field field = 'region' label = 'Region'/>
+                <Field field = 'coatOfArms' label = 'Coat of Arms'/> 
+                <Field field = 'words' label = 'Words'/> 
+                
+            </ItemDetails>
         )
 
+    
         return (
             <RowBlock left = {itemList} right = {charDetails}/>
         )
