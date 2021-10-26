@@ -67,7 +67,9 @@ export default class ItemDetails extends Component {
         if (!this.state.item){
             
             return (
-                <span className='select-error'>{this.props.placeholder}</span>
+                <div className="char-details rounded">
+                    <span className='select-error'>{this.props.placeholder}</span>
+                </div>
             )
 
         }
