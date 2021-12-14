@@ -4,12 +4,11 @@ import Header from '../header';
 import RandomChar from '../randomChar';
 import Button from 'reactstrap/lib/Button';
 import ErrorMessage from '../errorMessage/errormessage';
-import GotService from '../../services/gotservice';
-import { CharacterPage, BookPage, HousePage } from '../pages';
-
+import { CharacterPage, BookPage, HousePage, BooksItem, CharactersItem } from '../pages';
+import { BrowserRouter as Router, Route } from 'react-router-dom';
+import './app.css'
 
 export default class App extends Component{
-    // gotService = new GotService()
 
     state = {
         showRandomChar: true,
@@ -30,50 +29,59 @@ export default class App extends Component{
         })
     }
 
-    
-    
     render(){
-
-        const characters = () => GotService.getAllCharacters()
-        const books = () => GotService.getAllBooks()
-        const houses = () => GotService.getAllHouses()
-        
+         
         const char = this.state.showRandomChar ? <RandomChar/> : null 
 
         if (this.state.error){
             return <ErrorMessage/> 
         }
+
         return (
-            <> 
-                <Container>
-                    <Header />
-                </Container>
-                <Container>
-                    <Row>
-                        <Col lg={{size: 5, offset: 0}}>
-                            {char}
-                            <Button 
-                                className='random-btn'  
-                                color="primary" 
-                                size="lg"
-                                onClick = {this.toggleRandom}
-                            >Click me</Button>
-                        </Col>
+            <Router> 
+                <div className="app">
+                    <Container>
+                        <Header />
+                    </Container>
+                    <Container>
+                        <Row>
+                            <Col lg={{size: 5, offset: 0}}>
+                                {char}
+                                <Button 
+                                    className='random-btn'  
+                                    color="primary" 
+                                    size="lg"
+                                    onClick = {this.toggleRandom}
+                                >Click me</Button>
+                            </Col>
+                        </Row>
                         
-                    </Row>
-                    <CharacterPage
-                    items = {() => characters()}
-                    />
-                    <BookPage
-                    items = {() => books()}
-                    />
+                        <Route path='/characters/' component={CharacterPage}/>
+                        <Route path='/books/' exact component={BookPage}/>
+                        <Route path='/houses/' component={HousePage}/>
+                        
+                        <Route path='/books/:id' render={
+                            ({match}) => {
+                                return <BooksItem bookId = {match.params.id}/>
+                            }
+                        }/>
 
-                    <HousePage
-                    items = {() => houses()}
-                    />
+                        <Route path='/houses/:id' render={
+                            ({match}) => {
+                                return <BooksItem bookId = {match.params.id}/>
+                            }
+                        }/>
+                        
+                        <Route path='/characters/:id' render={
+                            ({match}) => {
+                                return <CharactersItem charId = {match.params.id}/>
+                            }
+                        }/>
+                        
 
-                </Container>
-            </>
+                    </Container>
+                </div>
+            </Router>
         );
     }
 };

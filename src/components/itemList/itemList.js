@@ -19,8 +19,7 @@ export default class ItemList extends Component {
                 this.setState({itemList})
             })
     }
-
-
+  
 
     renderItems(items){
         const {selectedItem} = this.props
@@ -32,7 +31,7 @@ export default class ItemList extends Component {
                 return (
                     <li 
                     key={Object.values(item).join('') + i}
-                    onClick = {() => selectedItem(id)} 
+                    onClick = {() => selectedItem(id + 1 )} 
                     className="list-group-item">
                         {label}
                     </li>
@@ -59,3 +58,6 @@ export default class ItemList extends Component {
         );
     }
 }
+
+
+

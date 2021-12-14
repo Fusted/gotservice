@@ -9,7 +9,6 @@ import GotService from "../../services/gotservice";
 
 
 export default class HousePage extends Component{
-    // gotService = new GotService()
 
     state = {
         error: false,
@@ -37,13 +36,14 @@ export default class HousePage extends Component{
 
     
     render(){
+        
         if (this.state.error){
             return <ErrorMessage/> 
         }
         const itemList = (
             <ItemList 
                     renderItem = {({name, gender}) => `${name}`}
-                    items = {() => this.props.items()}
+                    items = {() => GotService.getAllHouses()}
                     selectedItem = {(id) => this.onItemSelected(id)}
                     />
         )
